@@ -7,7 +7,7 @@ export const ConstructionPage = () => {
             display="flex" 
             justifyContent="center" 
             alignItems="center" 
-            height="100vh"
+            height="90vh"
         >
             <img src={'/construction.jpg'} alt="Em Construção" style={{ width: '400px', height: '400px' }} />
         </Box>
