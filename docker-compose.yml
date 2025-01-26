@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  # Serviço do frontend React
+  react:
+    container_name: react-financialAPP
+    build:
+      context: ./React
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./React:/app  # Sincroniza os arquivos do código entre o host e o container
+      - /app/node_modules  # Cria um volume nomeado para 'node_modules' no container
+    environment:
+      - WATCHPACK_POLLING=true  # Necessário para sistemas de arquivos como o Docker Desktop no Windows
+    command: npm start  # Comando para iniciar o React com o Hot Reload
+    depends_on:
+      - db
+
+  # Serviço do backend FastAPI
+  fastapi:
+    container_name: fastapi-financialAPP
+    build:
+      context: ./Financial_API
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000" 
+    volumes:
+      - ./Financial_API:/app 
+    environment:
+      - ENVIRONMENT=development
+      - DATABASE_URL=postgresql://admin:admin@db:5432/financial_db
+      - SECRET_KEY=dGhlYXBpZGVsaWNhZG8gc2VjdXJvIHZhbCwgd29ya3dpbmcuCg==
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 
+    depends_on:
+      - db 
+
+  # Serviço do PostgreSQL
+  db:
+    container_name: db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: financial_db
+    ports:
+      - "5432:5432" # Mapeia a porta do PostgreSQL no container para a máquina local
+    volumes:
+      - db-data:/var/lib/postgresql/data # Persistência de dados do banco
+
+volumes:
+  db-data: # Volume para persistir dados do PostgreSQL
