@@ -18,7 +18,7 @@ class UserModel(UserBase):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserLogin(UserBase):
     password: str
@@ -27,7 +27,6 @@ class UserResponse(BaseModel):
     id: int
     email: EmailStr
     success: bool
-    message: Optional[str] = None  # Melhor usar Optional aqui
-
+    message: Optional[str] = None 
     class Config:
-        orm_mode = True  # Garante que o Pydantic possa trabalhar com instâncias do SQLAlchemy
+        from_attributes = True  

@@ -10,11 +10,11 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./React:/app  # Sincroniza os arquivos do código entre o host e o container
-      - /app/node_modules  # Cria um volume nomeado para 'node_modules' no container
+      - ./React:/app 
+      - /app/node_modules 
     environment:
-      - WATCHPACK_POLLING=true  # Necessário para sistemas de arquivos como o Docker Desktop no Windows
-    command: npm start  # Comando para iniciar o React com o Hot Reload
+      - WATCHPACK_POLLING=true  
+    command: npm start  
     depends_on:
       - db
 
@@ -30,9 +30,9 @@ services:
       - ./Financial_API:/app 
     environment:
       - ENVIRONMENT=development
-      - DATABASE_URL=postgresql://admin:admin@db:5432/financial_db
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/financial_db
       - SECRET_KEY=dGhlYXBpZGVsaWNhZG8gc2VjdXJvIHZhbCwgd29ya3dpbmcuCg==
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     depends_on:
       - db 
 
@@ -41,13 +41,13 @@ services:
     container_name: db
     image: postgres:latest
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: financial_db
     ports:
-      - "5432:5432" # Mapeia a porta do PostgreSQL no container para a máquina local
+      - "5432:5432" 
     volumes:
-      - db-data:/var/lib/postgresql/data # Persistência de dados do banco
+      - db-data:/var/lib/postgresql/data 
 
 volumes:
-  db-data: # Volume para persistir dados do PostgreSQL
+  db-data: 

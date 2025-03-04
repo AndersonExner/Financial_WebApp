@@ -1,3 +1,3 @@
-from .users_controller import UsersController
+from .user_controller import UserController
 
-router = UsersController().router
+router = UserController().router
