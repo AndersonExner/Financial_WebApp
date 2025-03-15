@@ -6,7 +6,7 @@ from database import get_db
 
 class UserController:
     def __init__(self):
-        self.router = APIRouter(prefix="/users", tags=["users"])
+        self.router = APIRouter(prefix="/user", tags=["user"])
         self.router.add_api_route("/createUser", self.create_user_route, methods=["POST"])
         self.router.add_api_route("/login", self.login_route, methods=["POST"])
 
