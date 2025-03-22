@@ -8,7 +8,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from controllers import router
 
-
 app = FastAPI(debug=True)
 app.include_router(router)
 
@@ -19,10 +18,11 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permite todas as origens
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 

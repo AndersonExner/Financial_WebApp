@@ -1,10 +1,10 @@
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from datetime import datetime
 import bcrypt
 
 class UserBase(BaseModel):
-    email: EmailStr
+    login: str
 
 class UserCreate(UserBase):
     password: str
@@ -25,7 +25,7 @@ class UserLogin(UserBase):
 
 class UserResponse(BaseModel):
     id: int
-    email: EmailStr
+    login: str
     success: bool
     message: Optional[str] = None 
     class Config:

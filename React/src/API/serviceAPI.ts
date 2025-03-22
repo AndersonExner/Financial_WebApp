@@ -27,7 +27,11 @@ export const apiGet = async (route: string): Promise<ResponseAPI> => {
 
 export const apiPost = async (route: string, data: any ): Promise<ResponseAPI> => {
     try{
-        const resp: AxiosResponse = await axios.post(route);
+      const resp: AxiosResponse = await axios.post(route, data, {
+        headers: {
+          'Content-Type': 'application/json',  
+        },
+      });
     
         const respostaAPI : ResponseAPI = {
           success: resp.data.success,
@@ -49,7 +53,7 @@ export const apiPost = async (route: string, data: any ): Promise<ResponseAPI> =
 
 export const apiPut = async (route: string, data: any): Promise<ResponseAPI> => {
     try{
-        const resp: AxiosResponse = await axios.put(route);
+        const resp: AxiosResponse = await axios.put(route, data);
     
         const respostaAPI : ResponseAPI = {
           success: resp.data.success,

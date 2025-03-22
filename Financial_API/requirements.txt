@@ -6,3 +6,4 @@ python-dotenv
 bcrypt
 email-validator
 python-jose
+

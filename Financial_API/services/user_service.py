@@ -21,9 +21,9 @@ class UserService:
     
     def create_user(self, user: UserCreate) -> UserResponse:
         # Verifica se o e-mail já está em uso
-        existing_user = self.db.query(User).filter(User.email == user.email).first()
+        existing_user = self.db.query(User).filter(User.login == user.login).first()
         if existing_user:
-            raise HTTPException(status_code=400, detail="E-mail já registrado")
+            raise HTTPException(status_code=400, detail="Login já registrado")
         
         user.password = user.hashed_password()
 
@@ -31,13 +31,13 @@ class UserService:
 
         return UserResponse( 
             id=new_user.id, 
-            email=new_user.email, 
+            login=new_user.login, 
             message="Usuário criado com sucesso", 
             success=True 
         )
     
     def login(self, user_login: UserLogin) -> str:
-        user = UserRepository.get_user_by_email(self.db, user_login.email)
+        user = UserRepository.get_user_by_login(self.db, user_login.login)
         if not user:
             raise HTTPException(status_code=400, detail="Usuário não encontrado")
         
@@ -45,7 +45,7 @@ class UserService:
             raise HTTPException(status_code=400, detail="Senha incorreta")
 
         access_token_expires = timedelta(minutes=self.access_token_expire_minutes)
-        access_token = self.create_access_token(data={"sub": user.email}, expires_delta=access_token_expires)
+        access_token = self.create_access_token(data={"sub": user.login}, expires_delta=access_token_expires)
         
         return access_token
 

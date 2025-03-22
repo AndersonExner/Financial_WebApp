@@ -6,9 +6,9 @@ from models import User
 
 class UserRepository:
     @staticmethod
-    def get_user_by_email(db: Session, email: str) -> UserResponse:
+    def get_user_by_login(db: Session, login: str) -> UserResponse:
         try:
-            return db.query(User).filter(User.email == email).one()
+            return db.query(User).filter(User.login == login).one()
         except NoResultFound:
             return None
 
@@ -17,7 +17,7 @@ class UserRepository:
         try:
 
             new_user = User(
-                email=user.email,
+                login=user.login,
                 password=user.password
             )    
 

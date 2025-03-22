@@ -15,6 +15,7 @@ export const userService = {
     login: async (email: string, password: string) => {
       try {
         const response = await apiPost("/user/login", { email, password });  
+        console.log(response)
         return response;
       } catch (error) {
         throw new Error("Erro ao fazer login.");

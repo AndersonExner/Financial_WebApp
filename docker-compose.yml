@@ -2,40 +2,41 @@ version: "3.8"
 
 services:
   # Serviço do frontend React
-  react:
-    container_name: react-financialAPP
-    build:
-      context: ./React
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./React:/app 
-      - /app/node_modules 
-    environment:
-      - WATCHPACK_POLLING=true
-      - REACT_APP_API_URL=http://localhost:8000  
-    command: npm start  
-    depends_on:
-      - db
+  #react:
+  #  container_name: react-financialAPP
+  #  build:
+  #    context: ./React
+  #    dockerfile: Dockerfile
+  #  ports:
+  #    - "3000:3000"
+  #  volumes:
+  #    - ./React:/app 
+  #    - /app/node_modules 
+  #  environment:
+  #    - WATCHPACK_POLLING=true
+  #    - REACT_APP_API_URL=http://localhost:8000  
+  #  command: npm start  
+  #  depends_on:
+  #    - db
 
   # Serviço do backend FastAPI
-  fastapi:
-    container_name: fastapi-financialAPP
-    build:
-      context: ./Financial_API
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000" 
-    volumes:
-      - ./Financial_API:/app 
-    environment:
-      - ENVIRONMENT=development
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/financial_db
-      - SECRET_KEY=dGhlYXBpZGVsaWNhZG8gc2VjdXJvIHZhbCwgd29ya3dpbmcuCg==
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
-    depends_on:
-      - db 
+  #fastapi:
+  #  container_name: fastapi-financialAPP
+  #  build:
+  #    context: ./Financial_API
+  #    dockerfile: Dockerfile
+  #  ports:
+  #    - "8000:8000" 
+  #    - "5678:5678"
+  #  volumes:
+  #    - ./Financial_API:/app 
+  #  environment:
+  #    - ENVIRONMENT=development
+  #    - DATABASE_URL=postgresql://postgres:postgres@db:5432/financial_db
+  #    - SECRET_KEY=dGhlYXBpZGVsaWNhZG8gc2VjdXJvIHZhbCwgd29ya3dpbmcuCg==
+  #  command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+  #  depends_on:
+  #    - db 
 
   # Serviço do PostgreSQL
   db:
