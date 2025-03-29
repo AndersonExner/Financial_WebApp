@@ -20,10 +20,14 @@ class UserService:
         self.access_token_expire_minutes = 60
     
     def create_user(self, user: UserCreate) -> UserResponse:
-        # Verifica se o e-mail já está em uso
         existing_user = self.db.query(User).filter(User.login == user.login).first()
         if existing_user:
-            raise HTTPException(status_code=400, detail="Login já registrado")
+            return UserResponse( 
+                id= 0, 
+                login= "", 
+                message="Login inválido", 
+                success=False 
+            )
         
         user.password = user.hashed_password()
 
@@ -36,18 +40,49 @@ class UserService:
             success=True 
         )
     
-    def login(self, user_login: UserLogin) -> str:
+    def login(self, user_login: UserLogin) -> UserResponse:
         user = UserRepository.get_user_by_login(self.db, user_login.login)
         if not user:
-            raise HTTPException(status_code=400, detail="Usuário não encontrado")
+            return UserResponse(
+                id=0,
+                login="",
+                message="Usuário não encontrado",
+                success=False
+            )
         
+        # Validar senha
         if not bcrypt.checkpw(user_login.password.encode('utf-8'), user.password.encode('utf-8')):
-            raise HTTPException(status_code=400, detail="Senha incorreta")
+            return UserResponse(
+                id=0,
+                login="",
+                message="Senha incorreta",
+                success=False
+            )
 
-        access_token_expires = timedelta(minutes=self.access_token_expire_minutes)
-        access_token = self.create_access_token(data={"sub": user.login}, expires_delta=access_token_expires)
+        # Gerar token de acesso
+        try:
+            access_token_expires = timedelta(minutes=self.access_token_expire_minutes)
+            access_token = self.create_access_token(data={"sub": user.login}, expires_delta=access_token_expires)
+        except Exception as e:
+            return UserResponse(
+                id=0,
+                login="",
+                message=f"Erro ao gerar o token: {str(e)}",
+                success=False
+            )
+
         
-        return access_token
+        return UserResponse(
+            id=user.id,
+            login=user.login,
+            message="Logado com sucesso",
+            success=True,
+            data={  
+                "access_token": access_token,
+                "expires_in": access_token_expires.total_seconds(),
+                "token_type":"bearer" 
+            }
+        )
 
     def create_access_token(self, data: dict, expires_delta: Optional[timedelta] = None) -> str:
         to_encode = data.copy()

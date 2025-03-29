@@ -1,7 +1,6 @@
 import { apiPost } from "../API/serviceAPI"
 
 export const userService = {
-    // Função para criar um novo usuário
     createUser: async (login: string, password: string) => {
       try {
         const response = await apiPost("/user/createUser", { login, password });
@@ -11,7 +10,6 @@ export const userService = {
       }
     },
     
-    // Função de login
     login: async (login: string, password: string) => {
       try {
         const response = await apiPost("/user/login", { login, password });  

@@ -27,6 +27,7 @@ class UserResponse(BaseModel):
     id: int
     login: str
     success: bool
-    message: Optional[str] = None 
+    message: Optional[str] = None
+    data: Optional[object] = None 
     class Config:
         from_attributes = True  

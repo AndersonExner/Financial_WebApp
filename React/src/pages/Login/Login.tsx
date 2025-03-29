@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Paper, FormControlLabel, Checkbox } from "@mui/material";
 import { userService } from '../../services/userService';
+import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
     const [login, setlogin] = useState("");
@@ -8,6 +9,7 @@ export const Login = () => {
     const [isRegistering, setIsRegistering] = useState(false);
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState<"error" | "success" | "">("");
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
         if (!login || !password) {
@@ -34,9 +36,9 @@ export const Login = () => {
                 }
             } else {
                 const response = await userService.login(login, password);
-                console.log(response)
                 if (response.success) {
-                    alert("Login bem-sucedido!");
+                    localStorage.setItem('access_token', response.data.access_token)
+                    navigate("/dashboard");
                 } else {
                     setMessage(response.message || "Erro ao fazer login.");
                     setMessageType("error");

@@ -17,6 +17,6 @@ class UserController:
     
     async def login_route(self, user: UserCreate, db=Depends(get_db)):
         user_service = UserService(db)
-        token = user_service.login(user)
-        return {"access_token": token, "token_type": "bearer"}
+        loginResponse = user_service.login(user)
+        return loginResponse
 
