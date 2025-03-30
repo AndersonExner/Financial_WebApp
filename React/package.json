@@ -11,6 +11,7 @@
     "@mui/x-charts": "^7.23.2",
     "axios": "^1.8.3",
     "cra-template-typescript": "1.2.0",
+    "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.0.2",

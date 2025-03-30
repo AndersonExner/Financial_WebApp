@@ -8,7 +8,7 @@ class UserRepository:
     @staticmethod
     def get_user_by_login(db: Session, login: str) -> UserResponse:
         try:
-            return db.query(User).filter(User.login == login).one()
+            return db.query(User).filter(User.login == login).first()
         except NoResultFound:
             return None
 
@@ -27,5 +27,4 @@ class UserRepository:
             return new_user  
         except Exception as e:
             db.rollback()  
-            print(f"Erro ao salvar o usuário: {e}")
             raise  

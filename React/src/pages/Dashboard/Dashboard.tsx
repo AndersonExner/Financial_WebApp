@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+import { jwtDecode } from "jwt-decode"; 
+
 import Box from "@mui/material/Box";
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
 import AccountBalanceRoundedIcon from "@mui/icons-material/AccountBalanceRounded";
@@ -37,6 +40,23 @@ const despesasPercentual = despesas.map((item) => ({
 export const valueFormatter = (item: { value: number }) => `${item.value}%`;
 
 export const Dashboard = () => {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem('access_token_financialAPI');
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                console.log(decodedToken);
+                
+                //fetchUserData();
+
+            }catch (e) {
+                console.error("Erro ao decodificar o token:", e); 
+            }
+        }
+    }, []);
+
     return (
         <>
             <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" flexWrap="wrap">

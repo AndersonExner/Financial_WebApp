@@ -62,7 +62,10 @@ class UserService:
         # Gerar token de acesso
         try:
             access_token_expires = timedelta(minutes=self.access_token_expire_minutes)
-            access_token = self.create_access_token(data={"sub": user.login}, expires_delta=access_token_expires)
+            access_token = self.create_access_token(
+                    data={"sub": user.id},
+                    expires_delta=access_token_expires
+                )
         except Exception as e:
             return UserResponse(
                 id=0,
@@ -79,8 +82,6 @@ class UserService:
             success=True,
             data={  
                 "access_token": access_token,
-                "expires_in": access_token_expires.total_seconds(),
-                "token_type":"bearer" 
             }
         )
 
@@ -90,8 +91,10 @@ class UserService:
             expire = datetime.now(timezone.utc) + expires_delta
         else:
             expire = datetime.now(timezone.utc) + timedelta(hours=1)
-            
+        
         to_encode.update({"exp": expire})
-        encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
 
+        print("Payload antes da codificação JWT:", to_encode)
+
+        encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
         return encoded_jwt

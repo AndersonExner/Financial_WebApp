@@ -37,7 +37,7 @@ export const Login = () => {
             } else {
                 const response = await userService.login(login, password);
                 if (response.success) {
-                    localStorage.setItem('access_token', response.data.access_token)
+                    localStorage.setItem('access_token_financialAPI', response.data.access_token)
                     navigate("/dashboard");
                 } else {
                     setMessage(response.message || "Erro ao fazer login.");
