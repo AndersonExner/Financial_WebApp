@@ -33,8 +33,6 @@ export const apiPost = async (route: string, data: any): Promise<ResponseAPI> =>
       },
     });
 
-    console.log(resp)
-
     const respostaAPI: ResponseAPI = {
       success: resp.data.success,
       message: resp.data.message,

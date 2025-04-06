@@ -10,3 +10,6 @@ class User(Base):
     login = Column(String, unique=True, index=True)
     password = Column(String)
     created_at = Column(DateTime, default=datetime.now)
+
+    transactions = relationship("Transaction", back_populates="user")
+    categories = relationship("Category", back_populates="user")

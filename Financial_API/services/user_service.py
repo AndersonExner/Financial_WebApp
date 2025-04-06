@@ -1,8 +1,8 @@
 import bcrypt
 from sqlalchemy.orm import Session
 from models import User
-from schemas import UserCreate, UserResponse, UserLogin
-from repositories import UserRepository
+from schemas import UserCreate, UserResponse, UserLogin, TransactionResponse, TransactionCreate
+from repositories import UserRepository, TransactionRepository
 from fastapi import HTTPException
 from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
@@ -98,3 +98,35 @@ class UserService:
 
         encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
         return encoded_jwt
+    
+    def get_user_transactions(self, token: str) -> list[TransactionResponse]:
+        try:
+            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+            user_id: int = int(payload.get("sub"))
+            if user_id is None:
+                raise HTTPException(status_code=401, detail="Token inválido")
+            
+            transactions = TransactionRepository.get_transactions_by_user_id(self.db, user_id)
+            return transactions
+        
+        except JWTError:
+            raise HTTPException(status_code=401, detail="Não autorizado")
+        
+    def add_transaction(self, token: str, transaction_data: TransactionCreate):
+        try:
+            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+            user_id: int = int(payload.get("sub"))
+
+            if not user_id:
+                raise HTTPException(status_code=401, detail="Token inválido")
+
+            transaction = TransactionRepository.add_transaction(self.db, user_id, transaction_data)
+            return {
+                "success": True,
+                "message": "Transação adicionada com sucesso",
+                "data": {
+                    "id": transaction.id
+                }
+            }
+        except JWTError:
+            raise HTTPException(status_code=401, detail="Não autorizado")
